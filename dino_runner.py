@@ -402,4 +402,3 @@ while True:
         
         #update display
         pygame.display.update()
-    
