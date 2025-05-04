@@ -1,5 +1,6 @@
 #imports
 import pygame
+import os
 import sys
 import random
 
@@ -46,7 +47,49 @@ bird_width=51
 bird_up_height=33
 bird_down_height=37
 start_screen=True
+high_score=0
 clock=pygame.time.Clock()
+
+#func that checks if a txt file is empty
+def is_empty(file):
+    if os.stat(file).st_size>0:
+        return False
+    else:
+        return True
+    
+#func for encrypting a num
+def encrypt(num):
+    list1=list(str(num))
+    list1=[int(s) for s in list1]
+    list2=[]
+    str1=""
+    for i in list1:
+        list2.append(chr(i+110))
+    list2.reverse()
+    for i in list2:
+        str1+=i
+    return str1
+
+#func for deencrypting a num
+def deencrypt(text):
+    list1=list(text)
+    list2=[]
+    str1=""
+    num=0
+    for i in list1:
+        list2.append(ord(i)-110)
+    list2.reverse()
+    for i in list2:
+        str1+=str(i)
+    return int(str1)
+
+#load high score 
+high_score_file=open(f"{folder}/high_score.txt", "a")
+high_score_file.close()
+if not is_empty(f"{folder}/high_score.txt"):
+    high_score_file=open(f"{folder}/high_score.txt", "r")
+    high_score=int(deencrypt(high_score_file.read()))
+    high_score_file.close()
 
 #load dino images
 dino_img_def=pygame.image.load((f"{folder}/trex.png"))
@@ -84,8 +127,13 @@ bird_up=pygame.transform.scale(bird_up1,(51,33))
 
 #game over function
 def game_over():
-    global running
+    global running,score,high_score
     running=False
+    if score>high_score:
+        high_score=score
+        high_score_file=open(f"{folder}/high_score.txt", "w")
+        high_score_file.write(encrypt(int(high_score)))
+        high_score_file.close()
 
 #restart function
 def restart_func():
@@ -140,6 +188,7 @@ dino_runner_text=font1.render("Dino runner",False,text_color)
 start_text=font2.render(f"Press the Jump key",False,text_color)
 game_over_text=font1.render("Game over",False,text_color)
 restart_text=font2.render(f"Press Space to restart",False,text_color)
+high_score_text=font2.render(f"High score: {int(high_score)}",False,text_color)
 
 #starting screen 
 while start_screen and not running:
@@ -153,6 +202,8 @@ while start_screen and not running:
     #text
     window1.blit(dino_runner_text,(140,50))
     window1.blit(start_text,(225,125))
+    high_score_text=font2.render(f"High score: {int(high_score)}",False,text_color)
+    window1.blit(high_score_text,(245,170))
     
     #check for events
     for event in pygame.event.get():
@@ -380,6 +431,10 @@ while True:
         #text
         window1.blit(game_over_text,(185,50))
         window1.blit(restart_text,(225,125))
+        score_text=font2.render(f"Score: {int(score)}",False,text_color)
+        window1.blit(score_text,(295,180))
+        high_score_text=font2.render(f"High score: {int(high_score)}",False,text_color)
+        window1.blit(high_score_text,(245,230))
         
         #check for events
         for event in pygame.event.get():
