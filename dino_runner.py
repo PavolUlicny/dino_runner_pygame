@@ -83,10 +83,12 @@ bird_up1=pygame.image.load((f"{folder}/bird_up.png"))
 bird_down=pygame.transform.scale(bird_down1,(51,37))
 bird_up=pygame.transform.scale(bird_up1,(51,33))
 
+#game over function
 def game_over():
     global running
     running=False
 
+#restart function
 def restart_func():
     global running,dino_img,dino_img_def,dino_hit,dinox,dinoy,cactus1y,cactus2y,cactus3y,cactus1x,cactus2x,cactus3x,cactus_speed,grounded,fall_speed,score,animation_counter,animation_counter1,animation_counter2,animation_counter3,sliding,cactus1_bird,cactus2_bird,cactus3_bird,dino_width,dino_height,cactus1_img,cactus2_img,cactus3_img,cactus_imgs,cactus1_hit,cactus2_hit,cactus3_hit,cactus_height,single_cactus_width,double_cactus_width,triple_cactus_width,cactus_img_hitboxes,cactus_x,cactus_y,cactus_hitboxes
     running=True
