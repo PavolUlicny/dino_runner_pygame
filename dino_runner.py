@@ -1,6 +1,5 @@
 #imports
 import pygame
-import os
 import sys
 import random
 
@@ -401,4 +400,4 @@ while True:
         
         
         #update display
-        pygame.display.update()
+        pygame.display.update() 
