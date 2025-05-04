@@ -203,7 +203,7 @@ while start_screen and not running:
     window1.blit(dino_runner_text,(140,50))
     window1.blit(start_text,(225,125))
     high_score_text=font2.render(f"High score: {int(high_score)}",False,text_color)
-    window1.blit(high_score_text,(245,170))
+    window1.blit(high_score_text,(240,170))
     
     #check for events
     for event in pygame.event.get():
@@ -408,13 +408,7 @@ while True:
                     sliding=False
             if event.type==pygame.MOUSEBUTTONUP:
                 sliding=False
-        
-        #visible hitboxes (DELETE)
-        pygame.draw.rect(window1, (255, 0, 0), dino_hit, width=1)
-        pygame.draw.rect(window1, (255, 0, 0), cactus1_hit, width=1)
-        pygame.draw.rect(window1, (255, 0, 0), cactus2_hit, width=1)
-        pygame.draw.rect(window1, (255, 0, 0), cactus3_hit, width=1)
-        
+    
         #update display
         pygame.display.update()
         
@@ -432,7 +426,7 @@ while True:
         window1.blit(game_over_text,(185,50))
         window1.blit(restart_text,(225,125))
         score_text=font2.render(f"Score: {int(score)}",False,text_color)
-        window1.blit(score_text,(295,180))
+        window1.blit(score_text,(285,180))
         high_score_text=font2.render(f"High score: {int(high_score)}",False,text_color)
         window1.blit(high_score_text,(245,230))
         
