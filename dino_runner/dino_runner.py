@@ -9,7 +9,7 @@ global running, start_screen
 window_width=700
 window_height=350
 running=False
-folder="python/dino_runner"
+folder="dino_runner/"
 jump_strength=9
 gravity=0.5
 fall_speed=0
