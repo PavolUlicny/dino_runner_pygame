@@ -29,29 +29,6 @@ A lightweight, offline-friendly clone of the Chrome Dino game built with Pygame.
 - Python 3.8+
 - Pygame 2.x
 
-## Installation
-
-Use a virtual environment (recommended), then install dependencies.
-
-```powershell
-# From the repository root (Windows PowerShell)
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install --upgrade pip
-pip install pygame
-```
-
-## Run
-
-```powershell
-# From the repository root
-python dino_runner_pygame\dino_runner\dino_runner.py
-```
-
-If you're using VS Code in this workspace, you can also run the predefined task:
-
-- Terminal > Run Task… > "Run dino_runner"
-
 ## How it works (quick tour)
 
 - Game loop targets 60 FPS and handles input, physics, collisions, and rendering
@@ -69,11 +46,12 @@ If you're using VS Code in this workspace, you can also run the predefined task:
 
 ```
 dino_runner_pygame/
-  README.md            # This file
+  .gitignore          # Git exclusions
+  README.md           # This file
   dino_runner/
-    dino_runner.py     # Game entry point
-    *.png              # Sprites (dino, cacti, bird)
-    high_score.txt     # Created/updated at runtime
+    dino_runner.py    # Game entry point
+    *.png             # Sprites (dino, cacti, bird)
+    high_score.txt    # Created/updated at runtime
 ```
 
 ## Credits
@@ -83,5 +61,5 @@ dino_runner_pygame/
 
 ## License
 
-No license file was found. If you intend to reuse or distribute, please add a license (e.g., MIT) to this repository.
+Free to use: This project is free to use for any purpose (personal or commercial). No warranty is provided. Attribution is appreciated but not required.
 
