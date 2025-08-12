@@ -14,7 +14,7 @@ class DinoRunner:
         #create window
         WINDOW_WIDTH = 700
         WINDOW_HEIGHT = 350
-        self.WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption("Dino runner")
         
         #variables
@@ -45,8 +45,8 @@ class DinoRunner:
         
         #load fonts and texts
         self.TEXT_COLOR = (0, 0, 0)
-        self.LARGE_FONT = pygame.font.SysFont("Courier", 60)
-        self.SMALL_FONT = pygame.font.SysFont("Arial", 30)
+        self.large_font = pygame.font.SysFont("Courier", 60)
+        self.small_font = pygame.font.SysFont("Arial", 30)
         
         #load cactus images 
         single_cactus_img1 = pygame.image.load((f"{self.folder}single_cactus.png"))
@@ -59,24 +59,33 @@ class DinoRunner:
         self.cactus1_hit = pygame.Rect(self.cactus1x, self.cactus1y, self.single_cactus_width, self.cactus_height)
         self.cactus2_hit = pygame.Rect(self.cactus2x, self.cactus2y, self.triple_cactus_width, self.cactus_height)
         self.cactus3_hit = pygame.Rect(self.cactus3x, self.cactus3y, self.double_cactus_width, self.cactus_height)
+        self.cactus1_sprite_img = self.cactus_imgs[0]
+        self.cactus2_sprite_img = self.cactus_imgs[2]
+        self.cactus3_sprite_img = self.cactus_imgs[1]
         
         #load dino images
-        self.dino_img = pygame.image.load((f"{self.folder}trex.png"))
+        self.dino_img_def = pygame.image.load((f"{self.folder}trex.png"))
         self.dino_img_left = pygame.image.load((f"{self.folder}trex_left.png"))
         self.dino_img_right = pygame.image.load((f"{self.folder}trex_right.png"))
         self.dino_img_down_left = pygame.image.load((f"{self.folder}trex_down_left.png"))
         self.dino_img_down_right = pygame.image.load((f"{self.folder}trex_down_right.png"))
         self.dino_hit = pygame.Rect(self.dinox + 3, self.dinoy - 3, self.dino_width - 13, self.dino_height - 5)
+        self.dino_sprite_img = self.dino_img_def
         
         #load bird images
         bird_down1 = pygame.image.load((f"{self.folder}bird_down.png"))
         bird_up1 = pygame.image.load((f"{self.folder}bird_up.png"))
         self.bird_down = pygame.transform.scale(bird_down1, (51, 37))
         self.bird_up = pygame.transform.scale(bird_up1, (51, 33))
+        
+        #load text
+        self.game_over_text = self.large_font.render("Game over", False, self.TEXT_COLOR)
+        self.restart_text = self.small_font.render(f"Press Space to restart", False, self.TEXT_COLOR)
+        self.high_score_text = self.small_font.render(f"High score: {int(self.high_score)}", False, self.TEXT_COLOR)
 
     #func that checks if a txt file is empty
     def is_empty(self, file):
-        return os.stat(file).st_size < 0
+        return os.stat(file).st_size == 0
     
     #func that encrypts the high score
     def encrypt(self, num):
@@ -103,6 +112,11 @@ class DinoRunner:
             with open(f"{self.folder}high_score.txt", "w") as high_score_file:
                 high_score_file.write(self.encrypt(int(self.high_score)))
     
+    #exit game function
+    def exit_game(self):
+        pygame.quit()
+        sys.exit()
+        
     #game over function
     def game_over(self):
         self.save_high_score()
@@ -115,9 +129,9 @@ class DinoRunner:
     def start_screen_loop(self):
         
         #load text
-        dino_runner_text = self.LARGE_FONT.render("Dino runner", False, self.TEXT_COLOR)
-        start_text = self.SMALL_FONT.render(f"Press the Jump key", False, self.TEXT_COLOR)
-        high_score_text = self.SMALL_FONT.render(f"High score: {int(self.high_score)}", False, self.TEXT_COLOR)
+        dino_runner_text = self.large_font.render("Dino runner", False, self.TEXT_COLOR)
+        start_text = self.small_font.render(f"Press the Jump key", False, self.TEXT_COLOR)
+        high_score_text = self.small_font.render(f"High score: {int(self.high_score)}", False, self.TEXT_COLOR)
         
         while True:
             
@@ -125,20 +139,19 @@ class DinoRunner:
             self.clock.tick(60)
             
             #fill window with white color
-            self.WINDOW.fill((255, 255, 255))
+            self.window.fill((255, 255, 255))
             
             #text
-            self.WINDOW.blit(dino_runner_text , (140, 50))
-            self.WINDOW.blit(start_text, (225, 125))
-            self.WINDOW.blit(high_score_text, (240, 170))
+            self.window.blit(dino_runner_text , (140, 50))
+            self.window.blit(start_text, (225, 125))
+            self.window.blit(high_score_text, (240, 170))
             
             #check for events
             for event in pygame.event.get():
                     
                 #close the game if the window is closed
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+                    self.exit_game()
                     return
             
                 #binds keys to start game
@@ -148,8 +161,7 @@ class DinoRunner:
                         return
                         
                     elif event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                        sys.exit()
+                        self.exit_game()
                         return
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -164,14 +176,11 @@ class DinoRunner:
         
         #initialize variables 
         self.score = 0
-        jump_strength = 9
-        gravity = 0.5
+        JUMP_STRENGTH = 9
+        GRAVITY = 0.5
+        CACTUS_SPEED = 10
         fall_speed = 0
-        cactus_speed = 10
         grounded = True
-        self.cactus_height = 50
-        self.dino_width = 50
-        self.dino_height = 52
         animation_counter = 0
         animation_counter1 = 0
         animation_counter2 = 0
@@ -187,33 +196,33 @@ class DinoRunner:
             self.clock.tick(60)
             
             #fill window with white color
-            self.WINDOW.fill((255, 255, 255))
+            self.window.fill((255, 255, 255))
             
             #create the ground line
-            pygame.draw.line(self.WINDOW, (0, 0, 0), (0, 275), (700, 275), width = 2)
+            pygame.draw.line(self.window, (0, 0, 0), (0, 275), (700, 275), width = 2)
             
             #load images into the window
-            self.WINDOW.blit(self.dino_img, (self.dinox, self.dinoy))
-            self.WINDOW.blit(self.cactus1_img, (self.cactus1x, self.cactus1y))
-            self.WINDOW.blit(self.cactus2_img, (self.cactus2x, self.cactus2y))
-            self.WINDOW.blit(self.cactus3_img, (self.cactus3x, self.cactus3y))
+            self.window.blit(self.dino_sprite_img, (self.dinox, self.dinoy))
+            self.window.blit(self.cactus1_sprite_img, (self.cactus1x, self.cactus1y))
+            self.window.blit(self.cactus2_sprite_img, (self.cactus2x, self.cactus2y))
+            self.window.blit(self.cactus3_sprite_img, (self.cactus3x, self.cactus3y))
             
             #load texts
-            score_text = self.SMALL_FONT.render(f"Score: {int(self.score)}", False, self.TEXT_COLOR)
-            self.WINDOW.blit(score_text, (500, 30))
+            score_text = self.small_font.render(f"Score: {int(self.score)}", False, self.TEXT_COLOR)
+            self.window.blit(score_text, (500, 30))
             
             #apply jump/fall physics to dino
             self.dinoy += fall_speed
             
             #make the cacti move 
-            self.cactus1x -= cactus_speed
-            self.cactus2x -= cactus_speed
-            self.cactus3x -= cactus_speed
+            self.cactus1x -= CACTUS_SPEED
+            self.cactus2x -= CACTUS_SPEED
+            self.cactus3x -= CACTUS_SPEED
             
             #some lists and tuples
             cactus_x = (self.cactus1x, self.cactus2x, self.cactus3x)
             cactus_y = (self.cactus1y, self.cactus2y, self.cactus3y)
-            cactus_img_hitboxes = (self.cactus1_img, self.cactus2_img, self.cactus3_img)
+            cactus_img_hitboxes = (self.cactus1_sprite_img, self.cactus2_sprite_img, self.cactus3_sprite_img)
             cactus_hitboxes = [self.cactus1_hit, self.cactus2_hit, self.cactus3_hit]
             
             #return cacti if they go off screen
@@ -224,9 +233,10 @@ class DinoRunner:
                     cactus1_bird = False
                     self.cactus1y = 215
                     num1 = random.randint(0, 2)
-                    self.cactus1_img = self.cactus_imgs[num1]
+                    self.cactus1_sprite_img = self.cactus_imgs[num1]
                 else:
                     cactus1_bird = True
+                    
             if self.cactus2x < -60:
                 self.cactus2x = self.cactus1x + random.randint(500, 700)
                 num = random.randint(1, 3)
@@ -234,9 +244,10 @@ class DinoRunner:
                     cactus2_bird = False
                     self.cactus2y = 215
                     num1 = random.randint(0, 2)
-                    self.cactus2_img = self.cactus_imgs[num1]
+                    self.cactus2_sprite_img = self.cactus_imgs[num1]
                 else:
                     cactus2_bird = True
+                    
             if self.cactus3x < -60:
                 self.cactus3x = self.cactus2x + random.randint(500, 700)
                 num=random.randint(1, 3)
@@ -244,7 +255,7 @@ class DinoRunner:
                     cactus3_bird = False
                     self.cactus3y = 215
                     num1 = random.randint(0, 2)
-                    self.cactus3_img = self.cactus_imgs[num1]
+                    self.cactus3_sprite_img = self.cactus_imgs[num1]
                 else:
                     cactus3_bird = True
                     
@@ -253,23 +264,25 @@ class DinoRunner:
                 self.cactus1y = 190
                 animation_counter1 += 1
                 if animation_counter1 // 10 % 2 == 0:
-                    self.cactus1_img = self.bird_up
+                    self.cactus1_sprite_img = self.bird_up
                 else:
-                    self.cactus1_img = self.bird_down
+                    self.cactus1_sprite_img = self.bird_down
+                    
             if cactus2_bird:
                 self.cactus2y = 190
                 animation_counter2 += 1
                 if animation_counter2 // 10 % 2 == 0:
-                    self.cactus2_img = self.bird_up
+                    self.cactus2_sprite_img = self.bird_up
                 else:
-                    self.cactus2_img = self.bird_down
+                    self.cactus2_sprite_img = self.bird_down
+                    
             if cactus3_bird:
                 self.cactus3y = 190
                 animation_counter3 += 1
                 if animation_counter3 // 10 % 2 == 0:
-                    self.cactus3_img = self.bird_up
+                    self.cactus3_sprite_img = self.bird_up
                 else:
-                    self.cactus3_img = self.bird_down
+                    self.cactus3_sprite_img = self.bird_down
                     
             #hitboxes
             dino_def_rect = pygame.Rect(self.dinox + 3, self.dinoy - 3, self.dino_width - 13, self.dino_height - 5)
@@ -307,40 +320,38 @@ class DinoRunner:
                     self.dino_hit = dino_def_rect
                     self.dinoy = 223
                     if animation_counter // 5 % 2 == 0:
-                        self.dino_img = self.dino_img_left
+                        self.dino_sprite_img = self.dino_img_left
                     else:
-                        self.dino_img = self.dino_img_right
+                        self.dino_sprite_img = self.dino_img_right
                 else:
                     self.dino_hit = dino_down_rect
                     self.dinoy = 241
                     if animation_counter // 5 % 2 == 0:
-                        self.dino_img = self.dino_img_down_left
+                        self.dino_sprite_img = self.dino_img_down_left
                     else:
-                        self.dino_img = self.dino_img_down_right
+                        self.dino_sprite_img = self.dino_img_down_right
             else:
                 self.dino_hit = dino_def_rect
                 grounded = False
-                fall_speed += gravity
-                self.dino_img = self.dino_img
+                fall_speed += GRAVITY
+                self.dino_sprite_img = self.dino_img_def
                 
             #check for events
             for event in pygame.event.get():
                     
                 #close the game if the window is closed
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+                    self.exit_game()
                     return
 
                 #binds keys to jump
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_w or event.key == pygame.K_UP:
                         if grounded:
-                            fall_speed = -jump_strength
+                            fall_speed = -JUMP_STRENGTH
                     
                     elif event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                        sys.exit()
+                        self.exit_game()
                         return
                         
                     elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
@@ -349,7 +360,7 @@ class DinoRunner:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         if grounded:
-                            fall_speed = -jump_strength
+                            fall_speed = -JUMP_STRENGTH
                             
                     if event.button == 3:
                         sliding = True
@@ -368,12 +379,7 @@ class DinoRunner:
     def game_over_loop(self):
 
         #update score text
-        score_text = self.SMALL_FONT.render(f"Score: {int(self.score)}", False, self.TEXT_COLOR)
-        
-        #load text
-        game_over_text = self.LARGE_FONT.render("Game over", False, self.TEXT_COLOR)
-        restart_text = self.SMALL_FONT.render(f"Press Space to restart", False, self.TEXT_COLOR)
-        high_score_text = self.SMALL_FONT.render(f"High score: {int(self.high_score)}", False, self.TEXT_COLOR)
+        score_text = self.small_font.render(f"Score: {int(self.score)}", False, self.TEXT_COLOR)
         
         while True:
             
@@ -381,21 +387,20 @@ class DinoRunner:
             self.clock.tick(60)
             
             #fill window with white color
-            self.WINDOW.fill((255, 255, 255))
+            self.window.fill((255, 255, 255))
             
             #text
-            self.WINDOW.blit(game_over_text, (185, 50))
-            self.WINDOW.blit(restart_text, (225, 125))
-            self.WINDOW.blit(score_text, (285, 180))
-            self.WINDOW.blit(high_score_text, (245, 230))
+            self.window.blit(self.game_over_text, (185, 50))
+            self.window.blit(self.restart_text, (225, 125))
+            self.window.blit(score_text, (285, 180))
+            self.window.blit(self.high_score_text, (245, 230))
             
             #check for events
             for event in pygame.event.get():
                     
                 #close the game if the window is closed
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+                    self.exit_game()
                     return
 
                 #binds keys to start game
@@ -405,8 +410,7 @@ class DinoRunner:
                         return
                         
                     elif event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                        sys.exit()
+                        self.exit_game()
                         return
             
             #update display
