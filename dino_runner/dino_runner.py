@@ -119,6 +119,7 @@ class DinoRunner:
     
     # Exit the game
     def exit_game(self):
+        self.save_high_score()
         pygame.quit()
         sys.exit()
     
