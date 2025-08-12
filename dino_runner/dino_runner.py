@@ -113,9 +113,9 @@ class DinoRunner:
     # Save high score if beaten
     def save_high_score(self):
         if self.score > self.high_score:
-            self.high_score = self.score
+            self.high_score = int(self.score)
             with open(os.path.join(self.folder, "high_score.txt"), "w") as high_score_file:
-                high_score_file.write(self.encrypt(int(self.high_score)))
+                high_score_file.write(self.encrypt(self.high_score))
     
     # Exit the game
     def exit_game(self):
@@ -373,7 +373,7 @@ class DinoRunner:
             self.window.blit(self.cactus1_sprite_img, (self.cactus1X, self.cactus1Y))
             self.window.blit(self.cactus2_sprite_img, (self.cactus2X, self.cactus2Y))
             self.window.blit(self.cactus3_sprite_img, (self.cactus3X, self.cactus3Y))
-            score_text = self.small_font.render(f"Score: {self.score}", False, self.text_color)
+            score_text = self.small_font.render(f"Score: {int(self.score)}", False, self.text_color)
             self.window.blit(score_text, (500, 30))
             pygame.display.update()
             
@@ -381,7 +381,7 @@ class DinoRunner:
     def game_over_loop(self):
 
         # Refresh score UI text
-        score_text = self.small_font.render(f"Score: {self.score}", False, self.text_color)
+        score_text = self.small_font.render(f"Score: {int(self.score)}", False, self.text_color)
         high_score_text = self.small_font.render(f"High score: {self.high_score}", False, self.text_color)
         
         while True:
