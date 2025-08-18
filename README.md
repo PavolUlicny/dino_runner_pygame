@@ -56,10 +56,9 @@ dino_runner_pygame/
 
 ## Credits
 
-- Code and sprite assembly: repository author
 - Built with: [Pygame](https://www.pygame.org/)
+- Code by me 
 
 ## License
 
 Free to use: This project is free to use for any purpose (personal or commercial). No warranty is provided. Attribution is appreciated but not required.
-
