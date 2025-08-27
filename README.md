@@ -2,11 +2,13 @@
 
 A lightweight, offline-friendly clone of the Chrome Dino game built with Pygame. Jump, slide, and dodge cacti and birds while racking up your score. Your best run is saved between sessions.
 
+<!-- markdownlint-disable MD033 -->
 <div align="center">
-  <img src="dino_runner/trex.png" alt="T-Rex" height="64" />
-  <img src="dino_runner/single_cactus.png" alt="Cactus" height="64" />
-  <img src="dino_runner/bird_up.png" alt="Bird" height="64" />
+  <img src="screenshots/dino_runner.png" alt="Dino Runner screenshot" style="max-width: 100%; height: auto;" />
+  <br/>
+  <em>Gameplay screenshot</em>
 </div>
+<!-- markdownlint-enable MD033 -->
 
 ## Features
 
@@ -44,7 +46,7 @@ A lightweight, offline-friendly clone of the Chrome Dino game built with Pygame.
 
 ## Folder structure
 
-```
+```text
 dino_runner_pygame/
   .gitignore          # Git exclusions
   README.md           # This file
@@ -57,7 +59,7 @@ dino_runner_pygame/
 ## Credits
 
 - Built with: [Pygame](https://www.pygame.org/)
-- Code by me 
+- Code by me
 
 ## License
 
