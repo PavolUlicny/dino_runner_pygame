@@ -18,7 +18,7 @@ class DinoRunner:
         pygame.display.set_caption("Dino runner")
         
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        assets_in_subdir = os.path.join(base_dir, "dino_runner")
+        assets_in_subdir = os.path.join(base_dir, "assets")
         if os.path.isfile(os.path.join(assets_in_subdir, "single_cactus.png")):
             self.folder = assets_in_subdir
         else:
