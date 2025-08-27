@@ -81,4 +81,4 @@ dino_runner_pygame/
 
 ## License
 
-Free to use: This project is free to use for any purpose (personal or commercial). No warranty is provided. Attribution is appreciated but not required.
+This project is dedicated to the public domain under [The Unlicense](LICENSE). You can copy, modify, publish, use, compile, sell, or distribute it for any purpose. Provided "as is", without warranty of any kind.
