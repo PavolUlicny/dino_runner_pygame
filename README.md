@@ -31,29 +31,47 @@ A lightweight, offline-friendly clone of the Chrome Dino game built with Pygame.
 - Python 3.8+
 - Pygame 2.x
 
+## Quick start
+
+Run from the repo root (recommended to use a virtual environment):
+
+```bash
+# optional: create & activate a virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# install dependency
+pip install pygame
+
+# launch the game
+python3 dino_runner.py
+```
+
 ## How it works (quick tour)
 
 - Game loop targets 60 FPS and handles input, physics, collisions, and rendering
 - Obstacles recycle off-screen with randomized spacing; birds appear after you’ve warmed up
 - Hitboxes are tuned to be fair for both cactus shapes and bird animations
-- High score is saved to `dino_runner/high_score.txt` using a simple reversible transform
+- High score is saved to `assets/high_score.txt` using a simple reversible transform
 
 ## Troubleshooting
 
 - No window opens / ImportError: Ensure Pygame is installed in the active environment: `pip show pygame`
 - Black or white window only: Some remote/VM environments block hardware acceleration; try running locally
-- High score not saving: Ensure the repo is writable and the game can create/update `dino_runner/high_score.txt`
+- High score not saving: Ensure the repo is writable and the game can create/update `assets/high_score.txt`
 
 ## Folder structure
 
 ```text
 dino_runner_pygame/
-  .gitignore          # Git exclusions
-  README.md           # This file
-  dino_runner/
-    dino_runner.py    # Game entry point
-    *.png             # Sprites (dino, cacti, bird)
-    high_score.txt    # Created/updated at runtime
+  .gitignore         
+  README.md           
+  dino_runner.py       
+  assets/              
+    *.png              
+    high_score.txt     
+  screenshots/
+    *.png               
 ```
 
 ## Credits
